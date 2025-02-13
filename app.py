@@ -8,7 +8,7 @@ class Calendar:
         event={}
     
         #PLACEHOLDERS (WILL BE REPLACED BY HTML SYSTEM SOON)
-        event_title=input("Enter the event you'd like to enter into the calander: ")
+        event_title=input("Enter the event you'd like to enter into the calender: ")
         event_date=input("Enter the date of the event (YYYY-MM-DD HH:MM): ")
         user_datetime = datetime.strptime(event_date, "%Y-%m-%d %H:%M")
         event_description=input("Enter a light description of the event: ")
