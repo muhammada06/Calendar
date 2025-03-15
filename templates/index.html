@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planify</title>
+</head>
+<body>
+
+    <!-- Add an image at the top -->
+    <div style="text-align: center;">
+        <img src="{{ url_for('static', filename='titleMain.png') }}" alt="Planify Logo" width="500" height="auto">
+    </div>
+    
+   
+
+    <!-- Navigation section containing links to different parts -->
+    <nav style="display: flex; flex-direction: column; text-align: center;">
+        <!-- Conditional display of login/logout links -->
+        {% if logged_in %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+        
+        <a href="{{ url_for('calendar') }}">Calendar Page</a>
+    </nav>
+
+</body>
+</html>
+
