@@ -1,4 +1,4 @@
-from flask import Flask, render_template,request,redirect,url_for,flash,session
+from flask import Flask, render_template,request,redirect,url_for,flash,session,jsonify
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin,current_user
@@ -16,83 +16,121 @@ def register_routes(app,db,maps):
     @app.route('/FAQs')
     def faqs():
         return render_template('FAQs.html')
+    
+    @app.route('/calendar')
+    def calendar():
+        return render_template('calendar.html')
+    
+    @app.route('/aboutUs')
+    def aboutUs():
+        return render_template('aboutUs.html')
         
             
     
 
 
 
-    @app.route('/addEvent', methods=['GET','POST'])
+    @app.route('/addEvent', methods=['POST'])
     def addEvent():
         if request.method=='POST':
-            event_name=request.form['name']
-            location=request.form['location']
-            event_start=request.form['start_time']
-            event_end=request.form['end_time']
+            event_name=data.get['name']
+            location=data.get['location']
+            event_start=data.get['start_time']
+            event_end=data.get['end_time']
 
             try:
                 starting_time = datetime.strptime(event_start, '%Y-%m-%dT%H:%M')
                 ending_time = datetime.strptime(event_end, '%Y-%m-%dT%H:%M')
             except ValueError:
-                flash("Invalid date format. Please use the correct format.", category='error')
-                return render_template('addEvent.html')
+                return jsonify({"error": "Invalid date format. Please use YYYY-MM-DDTHH:MM"}), 400
         
             if starting_time>=ending_time:
-                flash("Event start time cannot be after the end time", catagory='error')
-                return render_template('addEvent.html')
+                return jsonify({"error": "Event start time cannot be after end time"}), 400
             
             event_location_check=maps.geocode(location)
 
             if not event_location_check:
-                flash ("Place does not exist", catagory='error')
-                return render_template('addEvent.html')
+                return jsonify({"error": "Place does not exist"}), 400
             
             createdEvent=Event(event_title=event_name,event_location=location,event_start=starting_time,event_end=ending_time,user_id=current_user.id)
             db.session.add(createdEvent)
             db.session.commit()
-            return redirect(url_for('calendar'))
+            return jsonify({"message": "Event added successfully!"}), 201
     
 
-    @app.route('/modify_event/<int:event_id>', methods=['GET','POST'])
-    def modifyEvent(event_id):
-        chosenEvent=Event.query.filter_by(id=event_id).first()
+    # @app.route('/modify_event/<int:event_id>', methods=['GET','POST'])
+    # def modifyEvent(event_id):
+    #     chosenEvent=Event.query.filter_by(id=event_id).first()
 
-        if request.method=='POST':
-            desired_modification=request.form.get('action')
+    #     if request.method=='POST':
+    #         desired_modification=request.form.get('action')
 
-            if desired_modification=='edit':
-                chosenEvent.event_title=request.form['name']
-                chosenEvent.event_location=request.form['location']
-                chosenEvent.event_start=request.form['start_time']
-                chosenEvent.event_end=request.form['end_time']
+    #         if desired_modification=='edit':
+    #             chosenEvent.event_title=request.form['name']
+    #             chosenEvent.event_location=request.form['location']
+    #             chosenEvent.event_start=request.form['start_time']
+    #             chosenEvent.event_end=request.form['end_time']
 
-                try:
-                    chosenEvent.starting_time = datetime.strptime(chosenEvent.event_start, '%Y-%m-%dT%H:%M')
-                    chosenEvent.ending_time = datetime.strptime(chosenEvent.event_end, '%Y-%m-%dT%H:%M')
-                except ValueError:
-                    flash("Invalid date format. Please use the correct format.", category='error')
-                    return render_template('modifyEvent.html')
+    #             try:
+    #                 chosenEvent.starting_time = datetime.strptime(chosenEvent.event_start, '%Y-%m-%dT%H:%M')
+    #                 chosenEvent.ending_time = datetime.strptime(chosenEvent.event_end, '%Y-%m-%dT%H:%M')
+    #             except ValueError:
+    #                 flash("Invalid date format. Please use the correct format.", category='error')
+    #                 return render_template('modifyEvent.html')
         
-                if chosenEvent.starting_time>=chosenEvent.ending_time:
-                    flash("Event start time cannot be after the end time", catagory='error')
-                    return render_template('modifyEvent.html')
+    #             if chosenEvent.starting_time>=chosenEvent.ending_time:
+    #                 flash("Event start time cannot be after the end time", catagory='error')
+    #                 return render_template('modifyEvent.html')
             
-                event_location_check=maps.geocode(chosenEvent.location)
+    #             event_location_check=maps.geocode(chosenEvent.location)
 
-                if not event_location_check:
-                    flash ("Place does not exist", catagory='error')
-                    return render_template('modifyEvent.html')
+    #             if not event_location_check:
+    #                 flash ("Place does not exist", catagory='error')
+    #                 return render_template('modifyEvent.html')
                 
-                db.session.commit()
-                return redirect(url_for('calendar')) 
+    #             db.session.commit()
+    #             return redirect(url_for('calendar')) 
             
-            elif desired_modification=='delete':
-                db.session.delete(chosenEvent)
-                db.session.commit()
-                flash("Deletion completion",catagory='success')
-                return redirect(url_for('calendar'))
+    #         elif desired_modification=='delete':
+    #             db.session.delete(chosenEvent)
+    #             db.session.commit()
+    #             flash("Deletion completion",catagory='success')
+    #             return redirect(url_for('calendar'))
         
-        return render_template('modifyEvent.html', event=chosenEvent)
+    #     return render_template('modifyEvent.html', event=chosenEvent)
+
+    @app.route('/delete_event', methods=['POST'])
+    def delete_event():
+        data = request.get_json()
+        event_title = data.get("title")
+
+        # Find the event in the database for the logged-in user
+        event = Event.query.filter_by(event_title=event_title, user_id=current_user.id).first()
+
+        if event:
+            db.session.delete(event)
+            db.session.commit()
+            return jsonify({"success": True})
+    
+        return jsonify({"success": False, "message": "Event not found"}), 404
+
+
+
+    @app.route('/getEvents', methods=['GET'])
+    def getEvents():
+        events = Event.query.filter_by(user_id=current_user.id).all()
+    
+    # Convert event objects into JSON format
+        events_list = [{
+            "name": event.event_title,
+            "location": event.event_location,
+            "start_time": event.event_start.strftime('%Y-%m-%dT%H:%M'),
+            "end_time": event.event_end.strftime('%Y-%m-%dT%H:%M')
+        } for event in events]
+
+        return jsonify(events_list)
+
+
             
 
 
@@ -162,7 +200,7 @@ def register_routes(app,db,maps):
             user = User.query.filter_by(username=username).first()
             if user and user.password==password:
                 session['user']=username
-                return redirect(url_for('homepage'))
+                return redirect(url_for('calendar'))
             else:
                 flash('Wrong username/password',category='error')
         return render_template('loginFINAL.html')
