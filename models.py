@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from flask import Flask
-from app import db 
+from app import db
 
 
 
@@ -21,6 +21,8 @@ class Event(UserMixin,db.Model):
     event_location=db.Column(db.String(200),nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('events', lazy='select'))
+
+
 
 
 

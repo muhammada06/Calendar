@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Events</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>All Events</h1>
+
+    {% if events %}
+        <ul>
+            {% for event in events %}
+                <li>
+                    <strong>{{ event.event_title }}</strong><br>
+                    Location: {{ event.event_location }}<br>
+                    Start Time: {{ event.event_start }}<br>
+                    End Time: {{ event.event_end }}<br><br>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No events found.</p>
+    {% endif %}
+
+    <a href="{{ url_for('calendar') }}">Back to Calendar</a>
+</body>
+</html>
+

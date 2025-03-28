@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Event</title>
+</head>
+<body>
+    <h1>Are you sure you want to delete this event?</h1>
+    <div>
+        <h3>{{ event.event_title }}</h3>
+        <p><strong>Location:</strong> {{ event.event_location }}</p>
+        <p><strong>Start Time:</strong> {{ event.event_start }}</p>
+        <p><strong>End Time:</strong> {{ event.event_end }}</p>
+    </div>
+    
+    <form method="POST">
+        <button type="submit">Yes, Delete Event</button>
+        <a href="{{ url_for('calendar') }}">Cancel</a>
+    </form>
+</body>
+</html>

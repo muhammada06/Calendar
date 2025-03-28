@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Directions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='cal.css') }}">
+</head>
+<body>
+    <h1>Directions to: {{ event.event_title }}</h1>
+    <p><strong>Location:</strong> {{ event.event_location }}</p>
+    <p><strong>Starts At:</strong> {{ event.start_time.strftime('%Y-%m-%d %H:%M') }}</p>
+
+    <hr>
+
+    <form method="POST">
+        <label for="starting_location">Your Starting Location:</label><br>
+        <input type="text" name="starting_location" required><br><br>
+
+        <label for="mode_of_transportation">Mode of Transportation:</label><br>
+        <select name="mode_of_transportation" required>
+            <option value="driving">Driving</option>
+            <option value="walking">Walking</option>
+            <option value="bicycling">Bicycling</option>
+            <option value="transit">Transit</option>
+        </select><br><br>
+
+        <button type="submit">Get Directions</button>
+    </form>
+
+    {% with messages = get_flashed_messages(category_filter=['error']) %}
+        {% if messages %}
+            <ul style="color: red;">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% if route %}
+        <hr>
+        <h2>Directions:</h2>
+        <ol>
+            {% for step in route[0]['legs'][0]['steps'] %}
+                <li>{{ step['html_instructions'] | safe }} ({{ step['distance']['text'] }})</li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('calendar') }}">Back to Calendar</a>
+</body>
+</html>

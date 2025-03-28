@@ -8,7 +8,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <title>Calendar</title>
     </head>
-
     <body>
         <div class="container">
             <div class="left">
@@ -18,33 +17,32 @@
                         <div class="date"></div>
                         <i class="fa fa-angle-right next"></i>
                     </div>
-                    
+                    <select class="select-view">
+                        <option value="month" selected>Month View</option>
+                        <option value="week">Week View</option>
+                    </select>
                     <div class="weekdays">
                         <div>Sun</div>
                         <div>Mon</div>
-                        <div>Tue</div>
+                        <div>Tues</div>
                         <div>Wed</div>
-                        <div>Thu</div>
-                        <div>Fri</div>
+                        <div>Thurs</div>
+                        <div>Friday</div>
                         <div>Sat</div>
                     </div>
-
-                    <div class="days">
-                    </div>
-
+                    <div class="days"></div>
                     <div class="goto-today">
                         <div class="goto">
                             <input type="text" placeholder="mm/yyyy" class="date-input">
                             <button class="goto-btn">go</button>
                         </div>
                         <button class="today-btn">today</button>
-
                     </div>
                 </div>
             </div>
             <div class="right">
                 <div class="today-date">
-                    <div class="event-date"></div>
+                    <div class="event-date">12 March 2025</div>
                 </div>
                 <div class="events"></div>
                 <div class="add-event-wrapper">
@@ -52,33 +50,34 @@
                         <div class="title">Add Event</div>
                         <i class="fas fa-times close"></i>
                     </div>
-                    <div class="add-event-body">
-                        <div class="add-event-input">
-                            <input type="text" placeholder="Event Name" class="event-name" required>
+                    <form action="/addEvent" method="POST">
+                        <div class="add-event-body">
+                            <div class="add-event-input">
+                                <input type="text" name="name" placeholder="Event Name" class="event-name" required>
+                            </div>
+                            <div class="add-event-input">
+                                <input type="datetime-local" name="start_time" class="event-time-from" required>
+                            </div>
+                            <div class="add-event-input">
+                                <input type="datetime-local" name="end_time" class="event-time-to" required>
+                            </div>
+                            <div class="add-event-input">
+                                <input type="text" name="description" placeholder="Event Description" class="event-description">
+                            </div>
+                            <div class="add-event-input">
+                                <input type="text" name="location" placeholder="Event Location" class="event-location" required>
+                            </div>
+                            <div class="add-event-footer">
+                                <button type="submit" class="add-event-btn">Add event</button>
+                            </div>
                         </div>
-                        <div class="add-event-input">
-                            <input type="text" placeholder="Event Time From" class="event-time-from" required>
-                        </div>
-                        <div class="add-event-input">
-                            <input type="text" placeholder="Event Time To" class="event-time-to">
-                        </div>
-                        <div class="add-event-input">
-                            <input type="text" placeholder="Event Description" class="event-description">
-                        </div>
-                        <div class="add-event-input">
-                            <input type="text" placeholder="Event Location" class="event-location">
-                        </div>
-                        <div class="add-event-footer">
-                            <button class="add-event-btn">Add event</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <button class="add-event">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
-
         <script src="{{ url_for('static', filename='script.js') }}"></script>
     </body>
 </html>
