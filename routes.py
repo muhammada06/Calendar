@@ -17,13 +17,31 @@ def register_routes(app,db,maps):
     def faqs():
         return render_template('FAQs.html')
     
-    @app.route('/calendar')
-    def calendar():
-        return render_template('calendar.html')
-    
     @app.route('/aboutUs')
     def aboutUs():
         return render_template('aboutUs.html')
+    
+    @app.route('/calendar')
+    def calendar():
+        events = Event.query.filter_by(user_id=current_user.id).all()
+        event_list = [
+        {
+            "day": event.event_start.day,
+            "month": event.event_start.month,
+            "year": event.event_start.year,
+            "events": [{
+                "id":event.id,
+                "title": event.event_title,
+                "time": f"{event.event_start.strftime('%I:%M %p')} - {event.event_end.strftime('%I:%M %p')}",
+                "location": event.event_location
+            }]
+        } for event in events
+    ]
+        return render_template('calendar.html', events=event_list)
+    
+
+    
+
     
     @app.route('/addEvent', methods=['GET', 'POST'])
     def addEvent():
@@ -74,6 +92,9 @@ def register_routes(app,db,maps):
         events = Event.query.filter_by(user_id=current_user.id).all()
 
         return render_template('viewAllEvents.html', events=events)
+    
+
+
 
 
    

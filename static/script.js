@@ -8,7 +8,7 @@ const calendar = document.querySelector(".calendar"),
   dateInput = document.querySelector(".date-input"),
   eventDate = document.querySelector(".event-date"),
   eventsContainer  = document.querySelector(".events");
-  addEventSubmit = document.querySelector(".add-event-btn");
+ 
 
 let today = new Date();
 let activeDay;
@@ -65,8 +65,8 @@ const months = [
 //   },
 // ];
 
-let eventsArr = [];
-getEvents();
+;
+
 
   //adding days
   function initCalendar(){
@@ -199,47 +199,15 @@ getEvents();
     }
   }
 
-const addEventBtn = document.querySelector(".add-event"),
-  addEventContainer = document.querySelector(".add-event-wrapper"),
-  addEventCloseBtn = document.querySelector(".close");
-  addEventTitle = document.querySelector(".event-name");
-  addEventFrom = document.querySelector(".event-time-from");
-  addEventTo = document.querySelector(".event-time-to");
-  addEventDescript = document.querySelector(".event-description");
-  addEventLocation = document.querySelector(".event-location");
 
-addEventBtn.addEventListener("click", () => {
-  addEventContainer.classList.toggle("active");
-})
 
-addEventCloseBtn.addEventListener("click", () => {
-  addEventContainer.classList.remove("active");
-})
+
+
   
 
-addEventFrom.addEventListener("input", (e) =>{
-  //removes anything thats not a number, might not keep this in
-  addEventFrom.value = addEventFrom.value.replace(/[^0-9:]/g,"");
-  if(addEventFrom.value.length ==2){
-    addEventFrom.value += ":";
-  }
-  //doesnt let user enter more than 5 chars
-  if(addEventFrom.value.length >5 ){
-    addEventFrom.value = addEventFrom.value.slice(0,5);
-  }
-});
 
-addEventTo.addEventListener("input", (e) =>{
-  //removes anything thats not a number, might not keep this in
-  addEventTo.value = addEventTo.value.replace(/[^0-9:]/g,"");
-  if(addEventTo.value.length ==2){
-    addEventTo.value += ":";
-  }
-  //doesnt let user enter more than 5 chars
-  if(addEventTo.value.length >5 ){
-    addEventTo.value = addEventTo.value.slice(0,5);
-  }
-});
+
+;
 
 
 //function to select days (make them active)
@@ -308,120 +276,28 @@ function updateEvents(date) {
         </div>`;
   }
   eventsContainer.innerHTML = events;
-  saveEvents();
+  
   
 }
 
-//function to add events
-addEventSubmit.addEventListener("click", () =>{
-  const eventTitle = addEventTitle.value;
-  const eventTimeFrom = addEventFrom.value;
-  const eventTimeTo = addEventTo.value;
-  const eventDescription = addEventDescript.value;  // Get the description input
-  const eventLocation = addEventLocation.value;
-
-  const timeFrom = convertTime(eventTimeFrom);
-  const timeTo = convertTime(eventTimeTo);
-
-  const newEvent = {
-    title : eventTitle,
-    time: timeFrom + " - " + timeTo,
-    description: eventDescription,
-    location: eventLocation,
-  };
-
-  let eventAdded = false;
-
-  if(eventsArr.length > 0){
-    //check if the selected date already has an event 
-    eventsArr.forEach((item) => {
-      if(item.day == activeDay && item.month == month + 1 && item.year == year){
-        item.events.push(newEvent);
-        eventAdded = true;
-      }
-    });
-  }
-
-  //if selected day has no events or array is empty
-  if(!eventAdded){
-    eventsArr.push({
-      day:activeDay,
-      month : month + 1,
-      year : year,
-      events : [newEvent]
-    });
-  }
-
-  //remove active from add event form
-  addEventContainer.classList.remove("active")
-
-  //clear fields
-  addEventTitle.value = "";
-  addEventFrom.value = "";
-  addEventTo.value = "";
-  addEventDescript.value = "";
-  addEventLocation.value = "";
-
-  //display added event
-  updateEvents(activeDay);
-
-  //add event class to new event 
-  const activeDayElem = document.querySelector(".day.active");
-  //checks to makes sure it does not already have event class
-  if(!activeDayElem.classList.contains("event")){
-    activeDayElem.classList.add("event");
-  }
-
-});
-
-function convertTime(time){
-  let timeArr = time.split(":");
-  let timeHour = timeArr[0];
-  let timeMin = timeArr[1];
-  let timeFormat = timeHour >= 12 ? "PM" : "AM";
-  timeHour = timeHour % 12 || 12;
-  time = timeHour + ":" + timeMin + " " + timeFormat;
-  return time;
+async function fetchEvents() {
+  const res = await fetch("/api/events"); // Your Flask route for event data
+  const data = await res.json();
+  eventsArr = data.events;
+  initCalendar();
 }
+
+fetchEvents();
+
+
+
+
 
 //deleting events
 eventsContainer.addEventListener("click", (e) => {
-  if(e.target.classList.contains("delete-event-btn")){
-    const eventTitle = e.target.closest('.event').querySelector('.event-title').innerHTML;
-    eventsArr.forEach((event) => {
-      if(event.day == activeDay && event.month == month + 1 && event.year == year){
-        event.events.forEach((item, index) => {
-          if(item.title == eventTitle){
-            event.events.splice(index, 1);
-          }
-        });
-
-        //remove day from events if no events left
-        if(event.events.length==0){
-          eventsArr.splice(eventsArr.indexOf(event), 1);
-          const activeDayElem = document.querySelector(".day.active");
-          if(activeDayElem.classList.contains("event")){
-            activeDayElem.classList.remove("event");
-          }
-        }
-      }
-    });
-  
-    updateEvents(activeDay);
+  if (e.target.classList.contains("delete-event-btn")) {
+    const eventId = e.target.dataset.eventId;
+    fetch(`/api/events/${eventId}`, { method: "DELETE" })
+      .then(() => fetchEvents());
   }
 });
-
-
-//saving to local storage 
-function saveEvents(){
-  console.log("yes");
-  localStorage.setItem("events", JSON.stringify(eventsArr));
-}
-
-function getEvents(){
-  if(localStorage.getItem("events" == null)){
-    return;
-  }
-  eventsArr.push(...JSON.parse(localStorage.getItem("events")));
-}
-

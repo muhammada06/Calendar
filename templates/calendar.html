@@ -45,39 +45,15 @@
                     <div class="event-date">12 March 2025</div>
                 </div>
                 <div class="events"></div>
-                <div class="add-event-wrapper">
-                    <div class="add-event-header">
-                        <div class="title">Add Event</div>
-                        <i class="fas fa-times close"></i>
-                    </div>
-                    <form action="/addEvent" method="POST">
-                        <div class="add-event-body">
-                            <div class="add-event-input">
-                                <input type="text" name="name" placeholder="Event Name" class="event-name" required>
-                            </div>
-                            <div class="add-event-input">
-                                <input type="datetime-local" name="start_time" class="event-time-from" required>
-                            </div>
-                            <div class="add-event-input">
-                                <input type="datetime-local" name="end_time" class="event-time-to" required>
-                            </div>
-                            <div class="add-event-input">
-                                <input type="text" name="description" placeholder="Event Description" class="event-description">
-                            </div>
-                            <div class="add-event-input">
-                                <input type="text" name="location" placeholder="Event Location" class="event-location" required>
-                            </div>
-                            <div class="add-event-footer">
-                                <button type="submit" class="add-event-btn">Add event</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
             </div>
             <button class="add-event">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
+        <script>
+        const eventsArr = {{ events|tojson }};
+        </script>
         <script src="{{ url_for('static', filename='script.js') }}"></script>
+
     </body>
 </html>
