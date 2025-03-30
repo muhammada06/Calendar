@@ -33,7 +33,8 @@ def register_routes(app,db,maps):
                 "id":event.id,
                 "title": event.event_title,
                 "time": f"{event.event_start.strftime('%I:%M %p')} - {event.event_end.strftime('%I:%M %p')}",
-                "location": event.event_location
+                "location": event.event_location,
+                "description":event.event_description
             }]
         } for event in events
     ]
@@ -50,6 +51,7 @@ def register_routes(app,db,maps):
             location = request.form['location']
             event_start = request.form['start_time']
             event_end = request.form['end_time']
+            description=request.form['description']
 
             try:
                 starting_time = datetime.strptime(event_start, '%Y-%m-%dT%H:%M')
@@ -75,7 +77,9 @@ def register_routes(app,db,maps):
                 event_location=location,
                 event_start=starting_time,
                 event_end=ending_time,
+                event_description=description,
                 user_id=current_user.id
+                
             )
             db.session.add(createdEvent)
             db.session.commit()
@@ -93,7 +97,14 @@ def register_routes(app,db,maps):
 
         return render_template('viewAllEvents.html', events=events)
     
-
+    @app.route('/api/events/<int:event_id>', methods=['DELETE'])
+    def delete_event(event_id):
+        event = Event.query.get(event_id)
+        if not event:
+            return jsonify({'error': 'Event not found'}), 404
+        db.session.delete(event)
+        db.session.commit()
+        return jsonify({'message': 'Event deleted'})
 
 
 

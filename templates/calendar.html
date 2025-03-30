@@ -46,9 +46,9 @@
                 </div>
                 <div class="events"></div>
             </div>
-            <button class="add-event">
+            <a href="{{ url_for('addEvent') }}" class="add-event">
                 <i class="fas fa-plus"></i>
-            </button>
+            </a>
         </div>
         <script>
         const eventsArr = {{ events|tojson }};

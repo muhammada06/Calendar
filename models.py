@@ -18,8 +18,9 @@ class Event(UserMixin,db.Model):
     event_title=db.Column(db.String(100),nullable=False)
     event_start=db.Column(db.DateTime,nullable=False)
     event_end=db.Column(db.DateTime,nullable=False)
-    event_location=db.Column(db.String(200),nullable=False)
+    event_location=db.Column(db.String(200),nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    event_description=db.Column(db.Text, nullable=True)
     user = db.relationship('User', backref=db.backref('events', lazy='select'))
 
 
