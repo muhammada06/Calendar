@@ -63,6 +63,11 @@ def register_routes(app,db,maps):
             if starting_time >= ending_time:
                 flash("Event start time cannot be after the end time", category='error')
                 return render_template('addEvent.html')
+            
+            if (event_name==""):
+                flash("Event Name Cannot Be Empty", category='error')
+                return render_template('addEvent.html')
+
 
         # Geocoding location check using a mapping service (like Google Maps API)
             event_location_check = maps.geocode(location)
@@ -97,17 +102,6 @@ def register_routes(app,db,maps):
 
         return render_template('viewAllEvents.html', events=events)
     
-    @app.route('/api/events/<int:event_id>', methods=['DELETE'])
-    def delete_event(event_id):
-        event = Event.query.get(event_id)
-        if not event:
-            return jsonify({'error': 'Event not found'}), 404
-        db.session.delete(event)
-        db.session.commit()
-        return jsonify({'message': 'Event deleted'})
-
-
-
    
     @app.route('/deleteEvent/<int:event_id>', methods=['GET', 'POST'])
     def deleteEvent(event_id):
@@ -120,7 +114,6 @@ def register_routes(app,db,maps):
             if selection=="yes":
                 db.session.delete(event)
                 db.session.commit()
-                flash("Event deleted successfully", category='success')
                 return redirect(url_for('calendar'))  # Redirect to the calendar page
             else:
                 return redirect(url_for('calendar'))  # Redirect to the calendar page
@@ -146,7 +139,7 @@ def register_routes(app,db,maps):
                 return render_template('viewDirections.html', event=chosenEvent)
 
             # Get ISO format time
-            iso_format_time = chosenEvent.start_time.isoformat()
+            iso_format_time = chosenEvent.event_start.isoformat()
 
             # Fetch directions
             route = maps.directions(
@@ -184,7 +177,6 @@ def register_routes(app,db,maps):
                 new_user = User(username=username, password=password)  
                 db.session.add(new_user)
                 db.session.commit()
-                flash('Registration successful!', category='success')
                 return redirect (url_for('login')) 
         return render_template('register.html')
         

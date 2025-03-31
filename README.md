@@ -26,8 +26,41 @@ In today's fast-paced world, planning can be a struggle. Many people don’t hav
 - **Backend:** Python  
 - **API:** Google Maps API  
 
-## 📌 Installation & Setup  
+## 📌 Installation & Setup 
 
+Installation Steps
+  1. Ensure [Docker](https://docs.docker.com/get-started/get-docker/) is downloaded on your device
+  2. Open your terminal and redirect to the folder you would like to clone this repository to
+  3. Using the command line:  `git clone https://github.com/Daniel-S-Allen/Mini-Project-3-Delivery`
+  4. Using the command line prompt  `cd`, redirect to the folder the repository is in
+  5. Run  `docker build -t calendar-app`
 
+📖 Usage Guide
 
+🔹 Creating an Account
 
+➡️ Press the "Create Account" button on the homepage.
+
+🔹 Logging In
+
+➡️ Press the "Login" button on the homepage.
+
+🔹 Viewing FAQ/About
+
+➡️ Click the respective buttons located on the homepage.
+
+🔹 Adding an Event
+
+➡️ Click the ➕ Plus symbol in the bottom left corner. You will be redirected to the "Add Me" form.
+
+🔹 Changing Dates
+
+➡️ Click on a specific date to view events. Use the arrows at the top or the month selector at the bottom if the event isn't in the current month.
+
+🔹 Viewing a Route
+
+➡️ Click on the event location to view the route.
+
+🔹 Downloading the Calendar
+
+➡️ Click the "Download Calendar" button on the calendar page

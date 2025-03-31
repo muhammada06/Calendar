@@ -8,12 +8,22 @@ const calendar = document.querySelector(".calendar"),
   dateInput = document.querySelector(".date-input"),
   eventDate = document.querySelector(".event-date"),
   eventsContainer  = document.querySelector(".events");
+  viewSelect = document.querySelector(".select-view");
+
+  viewSelect.addEventListener("change", function () {
+    if (this.value === "week") {
+        calendar.classList.add("week-view");
+    } else {
+        calendar.classList.remove("week-view");
+    }
+  });
  
 
 let today = new Date();
 let activeDay;
 let month = today.getMonth();
 let year = today.getFullYear();
+let isWeekView = false;
 
 const months = [
   "January",
@@ -33,87 +43,138 @@ const months = [
 
 
 ;
+viewSelect.addEventListener("change", (e) => {
+  isWeekView = e.target.value === "week";
+  initCalendar();
+});
 
 
   //adding days
-  function initCalendar(){
-    //get all days of current month and get prev days of last month n and next days of next month
-    const firstDay = new Date(year,month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const prevLastDay = new Date (year, month, 0);
-    const prevDays = prevLastDay.getDate();
-    const lastDate = lastDay.getDate();
-    const day = firstDay.getDay();
-    const nextDays = 7 - lastDay.getDay() - 1;
-
-    date.innerHTML = months[month] + " " + year;
-
-    let days = "";
-
-    for(let x = day; x > 0; x--){
-      days += `<div class = "day prev-day">${prevDays - x + 1}</div>`; 
-    }
-
-    //current months days
-    for(let i=1; i<=lastDate; i++){
-
-      //if event is on current day
-      let event = false;
-      eventsArr.forEach((eventObj) =>{
-        if(eventObj.day == i && eventObj.month == month + 1 && eventObj.year == year){
-          event = true;
-        }
-      })
-
-      if(i == new Date().getDate() && year == new Date().getFullYear() && month == new Date().getMonth()){ 
-
-        activeDay = i;
-        getActiveDay(i);
-        updateEvents(i);
-
-        if(event){
-          days += `<div class = "day today active event">${i}</div>`; 
-        }
-        else{
-          days += `<div class = "day today active">${i}</div>`; 
+    //adding days
+    function initCalendar(){
+      //get all days of current month and get prev days of last month n and next days of next month
+      const firstDay = new Date(year,month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const prevLastDay = new Date (year, month, 0);
+      const prevDays = prevLastDay.getDate();
+      const lastDate = lastDay.getDate();
+      const day = firstDay.getDay();
+      const nextDays = 7 - lastDay.getDay() - 1;
+  
+  
+      let days = "";
+  
+  
+      if (isWeekView) {
+        const firstDayOfWeek = new Date(today);
+        firstDayOfWeek.setDate(today.getDate() - today.getDay()); // Get Sunday of the week
+        
+        const startOfWeek = new Date(firstDayOfWeek);
+        const endOfWeek = new Date(firstDayOfWeek);
+        endOfWeek.setDate(firstDayOfWeek.getDate() + 6); // Saturday of the current week
+        date.innerHTML = `${months[startOfWeek.getMonth()]} ${startOfWeek.getDate()} - ${months[endOfWeek.getMonth()]} ${endOfWeek.getDate()} ${year}`;
+  
+        for (let i = 0; i < 7; i++) {
+          let currentDate = new Date(firstDayOfWeek);
+          currentDate.setDate(firstDayOfWeek.getDate() + i);
+          let dayNum = currentDate.getDate();
+          let event = eventsArr.some(e => e.day == dayNum && e.month == month + 1 && e.year == year);
+  
+          let classes = "day";
+          if (event) classes += " event";
+          if (
+              dayNum == today.getDate() &&
+              year == today.getFullYear() &&
+              month == today.getMonth()
+          ) {
+              activeDay = dayNum;
+              getActiveDay(dayNum);
+              updateEvents(dayNum);
+              classes += " today active";
+          }
+  
+          days += `<div class="${classes}">${dayNum}</div>`;
+  
+          
         }
       }
+  
       else{
-        if(event){
-          days += `<div class = "day event">${i}</div>`; 
+        date.innerHTML = months[month] + " " + year;
+        for(let x = day; x > 0; x--){
+          days += `<div class = "day prev-day">${prevDays - x + 1}</div>`; 
         }
-        else{
-          days += `<div class = "day">${i}</div>`; 
+    
+        //current months days
+        for(let i=1; i<=lastDate; i++){
+    
+          //if event is on current day
+          let event = false;
+          eventsArr.forEach((eventObj) =>{
+            if(eventObj.day == i && eventObj.month == month + 1 && eventObj.year == year){
+              event = true;
+            }
+          })
+    
+          if(i == new Date().getDate() && year == new Date().getFullYear() && month == new Date().getMonth()){ 
+    
+            activeDay = i;
+            getActiveDay(i);
+            updateEvents(i);
+    
+            if(event){
+              days += `<div class = "day today active event">${i}</div>`; 
+            }
+            else{
+              days += `<div class = "day today active">${i}</div>`; 
+            }
+          }
+          else{
+            if(event){
+              days += `<div class = "day event">${i}</div>`; 
+            }
+            else{
+              days += `<div class = "day">${i}</div>`; 
+            }
+          }
         }
+    
+        //next month's days
+        for(let n=1; n<=nextDays; n++){
+          days += `<div class = "day next-day">${n}</div>`
+        }
+    
       }
+      
+      daysContainer.innerHTML = days;
+      addListner();
+  
     }
-
-    //next month's days
-    for(let n=1; n<=nextDays; n++){
-      days += `<div class = "day next-day">${n}</div>`
-    }
-
-    daysContainer.innerHTML = days;
-    addListner();
-
-  }
 
   initCalendar();
 
   function prevMonth(){
-    month--;
-    if(month < 0){
-      month = 11;
-      year--;
+    if (isWeekView) {
+      today.setDate(today.getDate() - 7);
+    } else {
+      month--;
+      if (month < 0) {
+        month = 11;
+        year--;
+      }
     }
     initCalendar();
   }
 
   function nextMonth(){
-    month++;
-    if(month>11){
-      month = 0;
-      year++;
+    if (isWeekView) {
+      today.setDate(today.getDate() + 7);
+    } else {
+      month++;
+      if (month > 11) {
+        month = 0;
+        year++;
+      }
     }
     initCalendar();
   }
@@ -255,8 +316,3 @@ async function fetchEvents() {
 }
 
 fetchEvents();
-
-
-
-
-
