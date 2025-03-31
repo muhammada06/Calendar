@@ -112,18 +112,19 @@ def register_routes(app,db,maps):
     @app.route('/deleteEvent/<int:event_id>', methods=['GET', 'POST'])
     def deleteEvent(event_id):
         # Find the event by its ID
-        event = Event.query.get_or_404(event_id)
-
-        if event.user_id != current_user.id:
-            flash("You are not authorized to delete this event", category='error')
-            return redirect(url_for('calendar'))  # Redirect to the calendar if not the event owner
+        event = Event.query.filter_by(id=event_id).first()
 
         if request.method == 'POST':
             # Delete the event from the database
-            db.session.delete(event)
-            db.session.commit()
-            flash("Event deleted successfully", category='success')
-            return redirect(url_for('calendar'))  # Redirect to the calendar page
+            selection=request.form['confirm']
+            if selection=="yes":
+                db.session.delete(event)
+                db.session.commit()
+                flash("Event deleted successfully", category='success')
+                return redirect(url_for('calendar'))  # Redirect to the calendar page
+            else:
+                return redirect(url_for('calendar'))  # Redirect to the calendar page
+
 
         # GET method: Display confirmation page for event deletion
         return render_template('deleteEvent.html', event=event)
@@ -189,7 +190,7 @@ def register_routes(app,db,maps):
         
 
 
-    @app.route('/logout')
+    @app.route('/logout', methods=['POST'])
     def logout():
         logout_user()
         return render_template('logout.html')

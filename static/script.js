@@ -30,40 +30,7 @@ const months = [
   "December",
 ];
 
-// const eventsArr = [
-//   {
-//     day: 22,
-//     month: 3,
-//     year: 2025,
-//     events: [
-//       {
-//         title: "Event 1",
-//         time: "10:00 AM", 
-//         description: "hihisdfsd",
-//         location: "UA",
-//       },
-//       {
-//         title: "Event w",
-//         time: "11:00 AM", 
-//         description: "asdasdasd",
-//         location: "UA",
-//       },
-//     ],
-//   },
-//   {
-//     day: 14,
-//     month: 3,
-//     year: 2025,
-//     events: [
-//       {
-//         title: "Event 1",
-//         time: "10:00 AM", 
-//         description: "hihisdfsd",
-//         location: "UB",
-//       },
-//     ],
-//   },
-// ];
+
 
 ;
 
@@ -263,7 +230,7 @@ function updateEvents(date) {
             <div class="event-location">
               <div class="event-location">${event.location}</div>
             </div>
-            <button class="delete-event-btn">Delete Event</button>
+            <a href="/deleteEvent/${event.id}" class="delete-event-btn">Delete Event</a>
         </div>
         `;
       });
@@ -293,11 +260,3 @@ fetchEvents();
 
 
 
-//deleting events
-eventsContainer.addEventListener("click", (e) => {
-  if (e.target.classList.contains("delete-event-btn")) {
-    const eventId = e.target.dataset.eventId;
-    fetch(`/api/events/${eventId}`, { method: "DELETE" })
-      .then(() => fetchEvents());
-  }
-});
