@@ -3,26 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logout</title>
-    <title>Planify</title>
+    <title>Planify - Logout</title>
     <style>
-        body, html {
+        html, body {
             height: 100%;
+            width: 100%;
             margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            background-image: url('/static/background.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            width: 800px;
+            padding: 70px;
+            background-color: black;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             text-align: center;
+        }
+
+        .container h1 {
+            font-size: 38px;
+            font-weight: bold;
+            color: white;
+            font-family: Times New Roman, serif;
+        }
+
+        .container p {
+            font-size: 20px;
+            color: white;
+            font-family: 'Times New Roman', serif;
+        }
+
+
+        .button {
+            display: inline-block;
+            width: 200px;
+            padding: 12px;
+            margin: 15px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 10px;
+           
+            
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .button-secondary {
+            background-color: #007BFF;
+        }
+
+        .button-secondary:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
 
-    <div>
-        <h1>--------SUCCESSFULLY LOGGED OUT--------</h1>
+    <div class="container">
+        <h1>-------- SUCCESSFULLY LOGGED OUT --------</h1>
         <p>You have been logged out successfully. Thank you!</p>
-        <a href="{{ url_for('homepage') }}">Go to Homepage</a>
-        <a href="{{ url_for('login') }}">Go to Login</a>
+        <a href="{{ url_for('homepage') }}" class="button">Go to Homepage</a>
+        <a href="{{ url_for('login') }}" class="button button-secondary">Go to Login</a>
     </div>
 
 </body>

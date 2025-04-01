@@ -1,10 +1,11 @@
 from flask import Flask, render_template,request,redirect,url_for,flash,session,jsonify
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin,current_user,login_user,logout_user
 from flask_migrate import Migrate
 from models import User,Event
 import googlemaps
+
 
 def register_routes(app,db,maps):
 
@@ -151,12 +152,17 @@ def register_routes(app,db,maps):
 
             if not route:
                 flash("No route found.", category='error')
-                return redirect(url_for('calendar'))
+                return render_template('viewDirections.html', event=chosenEvent)
+            
+            duration_seconds = route[0]['legs'][0]['duration']['value']
+            travel_time = timedelta(seconds=duration_seconds)
+            time_to_leave=chosenEvent.event_start-travel_time
 
-            return render_template('viewDirections.html', event=chosenEvent, route=route)
+            return render_template('viewRoute.html', event=chosenEvent, route=route, starting_place=starting_place, mode_of_transportation=mode_of_transportation, travel_time=travel_time, time_to_leave=time_to_leave)
 
-        # GET Request - just show form
         return render_template('viewDirections.html', event=chosenEvent)
+
+
 
 
     #USER AUTHORIZATION SYSTEM
@@ -172,8 +178,11 @@ def register_routes(app,db,maps):
 
             if confirm_password!=password:
                 flash('Passwords do not match', category='error')
+            
+            if len(password)<8:
+                flash('Password has to be at least 8 characters', category='error')
         
-            if not existing_user and confirm_password==password:
+            if not existing_user and confirm_password==password and len(password)<8:
                 new_user = User(username=username, password=password)  
                 db.session.add(new_user)
                 db.session.commit()

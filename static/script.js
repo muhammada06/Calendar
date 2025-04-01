@@ -289,7 +289,7 @@ function updateEvents(date) {
               <div class="event-description">${event.description}</div>
             </div>
             <div class="event-location">
-              <div class="event-location">${event.location}</div>
+              <a href="/view_directions/${event.id}" class="event-location">${event.location}</a>
             </div>
             <a href="/deleteEvent/${event.id}" class="delete-event-btn">Delete Event</a>
         </div>

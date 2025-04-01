@@ -13,7 +13,7 @@ body{
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: url('../static/background.jpg') no-repeat center/cover;
+  background: url('background.jpg') no-repeat center/cover;
 }
 
 .title{
@@ -31,6 +31,7 @@ body{
 }
 .box{
   width: 400px;
+  margin-top: 40px;
   background: rgb(0, 0, 0);
   border: 2px solid rgba(129, 0, 189, 0.459);
   box-shadow: 10px 10px 20px #8100bd73;  

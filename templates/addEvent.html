@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Event</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Link to your stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='ae.css') }}">
 </head>
 <body>
+  <div class ="title">PLANIFY</div>
+  <div class="box">
     <h1>Add a New Event</h1>
 
     <!-- Display any error messages -->
@@ -22,26 +24,31 @@
 
     <!-- Form to add event -->
     <form method="POST" action="{{ url_for('addEvent') }}">
-        <label for="name">Event Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
+        <div class ="input-box">
+          <input type="text" name="name" placeholder="Title" required>
+        </div>
+        <div class ="input-box">
+            <input type="text" name="location" placeholder="Location" required>
+        </div>
+        <div class ="input-box">
+          <input type="datetime-local" name="start_time" required>
+        </div>
+        <div class ="input-box">
+          <input type="datetime-local" name="end_time" required>
+        </div>
+        <div class ="input-box">
+            <input type="text" name="description" placeholder="Description" required>
+        </div>
 
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" required><br><br>
 
-        <label for="start_time">Start Time:</label>
-        <input type="datetime-local" id="start_time" name="start_time" required><br><br>
-
-        <label for="end_time">End Time:</label>
-        <input type="datetime-local" id="end_time" name="end_time" required><br><br>
-
-        <label for="end_time">Description:</label>
-        <input type="text" id="description" name="description"><br><br>
-
-        <button type="submit">Add Event</button>
+        <button type="submit" class="add">Add Event</button>
     </form>
 
     <br>
-    <a href="{{ url_for('calendar') }}">Back to Calendar</a>
+    <div class="link-section">
+      <a href="{{ url_for('calendar') }}" class = "link">Back to Calendar</a>
+    </div>
+  </div>
 
 </body>
 </html>

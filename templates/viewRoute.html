@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Details</title>
+</head>
+<body>
+    <h1>Route from {{ starting_place }} to {{ event.event_location }}</h1>
+
+    <p><strong>Mode of Transportation:</strong> {{ mode_of_transportation }}</p>
+    <p><strong>Estimated Travel Time:</strong> {{ travel_time }} minutes</p>
+    <p><strong>Recommended Departure Time:</strong> {{ time_to_leave.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+    <h2>Directions:</h2>
+    <ul>
+        {% for step in route[0]['legs'][0]['steps'] %}
+            <li>{{ step['html_instructions'] | safe }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('viewRoute', event_id=event.id) }}">Go Back</a>
+</body>
+</html>
