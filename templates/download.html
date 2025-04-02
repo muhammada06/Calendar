@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Events</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Download Your Events</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form action="/downloadEvents" method="POST">
+            <label for="starting_time">Start Date & Time:</label>
+            <input type="datetime-local" id="starting_time" name="starting_time" required>
+            <label for="end_time">End Date & Time:</label>
+            <input type="datetime-local" id="end_time" name="end_time" required>
+            <button type="submit">Download Events</button>
+        </form>
+    </div>
+</body>
+</html>

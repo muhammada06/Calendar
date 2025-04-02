@@ -1,4 +1,4 @@
-from flask import Flask, render_template,request,redirect,url_for,flash,session,jsonify
+from flask import Flask, render_template,request,redirect,url_for,flash,session,jsonify,Response
 from datetime import datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin,current_user,login_user,logout_user
@@ -60,13 +60,25 @@ def register_routes(app,db,maps):
             except ValueError:
                 flash("Invalid date format. Please use the correct format.", category='error')
                 return render_template('addEvent.html')
+            
+            if len(event_name)>=100:
+                flash("Title must be less then 100 characters",catagory='error')
+                return render_template('addEvent.html')
+            
+            if len(location)>=200:
+                flash("Location must be less then 200 characters",catagory='error')
+                return render_template('addEvent.html')
 
             if starting_time >= ending_time:
                 flash("Event start time cannot be after the end time", category='error')
                 return render_template('addEvent.html')
             
-            if (event_name==""):
+            if not event_name or not event_name.strip():
                 flash("Event Name Cannot Be Empty", category='error')
+                return render_template('addEvent.html')
+            
+            if not event_name.strip():
+                flash("Description can't be empty spaces", category='error')
                 return render_template('addEvent.html')
 
 
@@ -96,12 +108,6 @@ def register_routes(app,db,maps):
     
 
 
-    @app.route('/viewAllEvents', methods=['GET'])
-    def viewAllEvents():
-        # Query all events for the logged-in user
-        events = Event.query.filter_by(user_id=current_user.id).all()
-
-        return render_template('viewAllEvents.html', events=events)
     
    
     @app.route('/deleteEvent/<int:event_id>', methods=['GET', 'POST'])
@@ -182,7 +188,7 @@ def register_routes(app,db,maps):
             if len(password)<8:
                 flash('Password has to be at least 8 characters', category='error')
         
-            if not existing_user and confirm_password==password and len(password)<8:
+            if not existing_user and confirm_password==password and len(password)>=8:
                 new_user = User(username=username, password=password)  
                 db.session.add(new_user)
                 db.session.commit()
@@ -211,3 +217,49 @@ def register_routes(app,db,maps):
             else:
                 flash('Wrong username/password',category='error')
         return render_template('loginFINAL.html')
+    
+    @app.route('/downloadEvents', methods=['GET','POST'])
+    def download():
+        if request.method=="POST":
+            events = Event.query.filter_by(user_id=current_user.id).all()
+            startingtime_string=request.form.get('starting_time')
+            endingtime_string=request.form.get('end_time')
+
+            if startingtime_string>endingtime_string:
+                flash ("Start time can't be greater then end time", catatory="error")
+                return render_template('download.html')
+
+
+
+
+            starting_time = datetime.strptime(startingtime_string, '%Y-%m-%dT%H:%M')
+            ending_time = datetime.strptime(endingtime_string, '%Y-%m-%dT%H:%M')
+
+            existing_event=False
+            event_in_timeframe=[]
+            for event in events:
+                if event.event_start>=starting_time and event.event_end<=ending_time:
+                    existing_event=True
+                    event_in_timeframe.append(event)
+            
+            file_content=f"EVENT INFORMATION FROM {starting_time.strftime('%Y-%m-%d %H:%M')}- {ending_time.strftime('%Y-%m-%d %H:%M')}\n\n"
+            if existing_event==True:
+                for event in event_in_timeframe:
+                    file_content+=f"Event Name:{event.event_title}\nEvent Location:{event.event_location}\nEvent Start:{event.event_start}\nEvent End:{event.event_end}\n"
+                    if event.event_description:
+                        file_content+=f"Description:{event.event_description}\n\n"
+                    else:
+                        file_content+="\n\n"
+            
+            else:
+                file_content+="NO EVENTS IN SELECTED TIMEFRAME"
+            
+            response = Response(file_content, mimetype="text/plain")
+            response.headers.set("Content-Disposition", "attachment", filename="events.txt")
+            return response
+        return render_template('download.html')
+            
+
+
+
+

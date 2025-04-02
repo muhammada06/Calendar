@@ -271,12 +271,12 @@ function updateEvents(date) {
   let events = "";
   eventsArr.forEach((event) => {
     if (
-      date >= event.start_day &&
-      date <= event.end_day &&
+      date == event.day &&
       month + 1 == event.month &&
       year == event.year
     ) {
-      events += `
+      event.events.forEach((event) => {
+        events += `
         <div class="event">
             <div class="title">
               <i class="fas fa-circle"></i>
@@ -285,20 +285,28 @@ function updateEvents(date) {
             <div class="event-time">
               <span class="event-time">${event.time}</span>
             </div>
-            ${event.description ? `<div class="event-description">${event.description}</div>` : ""}
-            ${event.location ? `<div class="event-location"><a href="/view_directions/${event.id}">${event.location}</a></div>` : ""}
+            <div class="event-description">
+              <div class="event-description">${event.description}</div>
+            </div>
+            <div class="event-location">
+              <a href="/view_directions/${event.id}" class="event-location">${event.location}</a>
+            </div>
             <a href="/deleteEvent/${event.id}" class="delete-event-btn">Delete Event</a>
         </div>
         `;
+      });
     }
   });
-
+  
   if (events === "") {
-    events = `<div class="no-event"><h3>No Events</h3></div>`;
+    events = `<div class="no-event">
+            <h3>No Events</h3>
+        </div>`;
   }
   eventsContainer.innerHTML = events;
+  
+  
 }
-
 
 async function fetchEvents() {
   const res = await fetch("/api/events"); // Your Flask route for event data
