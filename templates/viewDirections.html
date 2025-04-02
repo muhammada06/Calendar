@@ -2,28 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='view.css') }}">
     <title>View Directions</title>
 </head>
 <body>
-    <h1>Directions to: {{ event.event_title }}</h1>
-    <p><strong>Location:</strong> {{ event.event_location }}</p>
-    <p><strong>Starts At:</strong> {{ event.event_start.strftime('%Y-%m-%d %H:%M') }}</p>
 
-    <hr>
+    <div class="title">PLANIFY</div>
+    <div class="box">
+        
+        <!-- Flash Messages (Placed optimally within the box for visibility) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-    <form method="POST">
-        <label for="starting_location">Your Starting Location:</label><br>
-        <input type="text" name="starting_location" required><br><br>
+        <h1>Directions to: {{ event.event_title }}</h1>
+        <p><strong>Location:</strong> {{ event.event_location }}</p>
+        <p><strong>Starts At:</strong> {{ event.event_start.strftime('%Y-%m-%d %H:%M') }}</p>
 
-        <label for="mode_of_transportation">Mode of Transportation:</label><br>
-        <select name="mode_of_transportation" required>
-            <option value="driving">Driving</option>
-            <option value="walking">Walking</option>
-        </select><br><br>
+        <hr>
 
-        <button type="submit">Get Directions</button>
-    </form>
-    <br>
-    <a href="{{ url_for('calendar') }}">Back to Calendar</a>
+        <form method="POST">
+            <div class="input-box">
+                <input type="text" name="starting_location" placeholder="Your Starting Location:" required>
+            </div>
+
+            <label for="mode_of_transportation">Mode of Transportation:</label>
+            
+            <select name="mode_of_transportation" required>
+                <option value="driving">Driving</option>
+                <option value="walking">Walking</option>
+            </select>
+
+            <button type="submit" class="get">Get Directions</button>
+        </form>
+
+        <div class="link-section">
+            <a href="{{ url_for('calendar') }}" class="link">Back to Calendar</a>
+        </div>
+    </div>
+
 </body>
 </html>
