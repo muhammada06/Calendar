@@ -550,3 +550,52 @@ body{
     background-color: #ffffff; 
     color: #a107e9;
 }
+
+.download-events-btn{
+    height: 30px;
+    width: 130px;
+    font-size: 12px;
+    font-weight: 500;
+    outline: none;
+    border: none;
+    color: white;
+    margin-bottom: 10px;
+    background-color: #a107e8;
+    border-radius: 5px;
+    padding: 5px 10px;
+    position: absolute;
+    right: 0; 
+    margin-right: 120px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.15s;
+    
+}
+
+.download-events-btn:hover{
+    opacity: 0.5;
+}
+
+.logout-btn{
+    height: 30px;
+    width: 90px;
+    font-size: 12px;
+    font-weight: 500;
+    outline: none;
+    border: none;
+    color: white;
+    margin-bottom: 10px;
+    background-color: #a107e8;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.15s;
+    position: absolute;
+    right: 0; 
+    margin-right: 20px;
+}
+
+.logout-btn:hover{
+    opacity: 0.5;
+}

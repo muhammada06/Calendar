@@ -31,7 +31,7 @@ In today's fast-paced world, planning can be a struggle. Many people don’t hav
 Installation Steps
   1. Ensure [Docker](https://docs.docker.com/get-started/get-docker/) is downloaded on your device
   2. Open your terminal and redirect to the folder you would like to clone this repository to
-  3. Using the command line:  `git clone https://github.com/Daniel-S-Allen/Mini-Project-3-Delivery`
+  3. Using the command line:  `git clone https://github.com/muhammada06/Calendar`
   4. Using the command line prompt  `cd`, redirect to the folder the repository is in
   5. Run  `docker build -t calendar-app`
 

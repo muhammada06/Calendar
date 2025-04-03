@@ -49,7 +49,10 @@
         <a href="{{ url_for('addEvent') }}" class="add-event">
             <i class="fas fa-plus"></i>
         </a>
-        <a href="{{ url_for('download') }}" class="download-events-btn">Download Events</a>
+        <a href="{{ url_for('download') }}">
+            <button class="download-events-btn">Download Events</button>
+        </a>
+        
 
         <!-- Logout Button -->
         <form action="{{ url_for('logout') }}" method="POST">
