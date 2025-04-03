@@ -513,6 +513,8 @@ body{
     background-color: #a107e9;
     cursor: pointer;
     transition: opacity 0.15s;
+    display: flex;
+    text-decoration: none;
 
 }
 .add-event:hover{
@@ -548,4 +550,3 @@ body{
     background-color: #ffffff; 
     color: #a107e9;
 }
-

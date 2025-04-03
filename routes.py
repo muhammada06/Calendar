@@ -229,9 +229,6 @@ def register_routes(app,db,maps):
                 flash ("Start time can't be greater then end time", catatory="error")
                 return render_template('download.html')
 
-
-
-
             starting_time = datetime.strptime(startingtime_string, '%Y-%m-%dT%H:%M')
             ending_time = datetime.strptime(endingtime_string, '%Y-%m-%dT%H:%M')
 
