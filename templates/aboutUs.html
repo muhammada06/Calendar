@@ -36,7 +36,7 @@
         .container {
             width: 1000px; 
             padding: 60px;
-            background-color: #3478db;
+            background-color: #000000;
             border-radius: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             text-align: center;
@@ -45,25 +45,26 @@
         }
 
         .logo {
-            width: 300px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 60px;
+            width: 700px;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
         }
 
         .container p {
             font-size: 40px;
             font-weight: bold;
-            font-family: 'Times New Roman', serif;
-            margin-top: 250px;
+            font-family: "Poppins", sans-serif;
+            margin-top: 50px;
+            color: white;
         }
 
         .about-container {
             max-width: 90%;
             width: 1200px;
             padding: 20px;
-            background-color: #ff5c81;
+            background-color: #85059f;
             border-radius: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             text-align: center;
@@ -72,8 +73,8 @@
 
         .about-container p {
             font-size: 24px;
-            font-family: 'Times New Roman', serif;
-            color: #333;
+            font-family: "Poppins", sans-serif;
+            color: #ffffff;
             line-height: 1.6;
         }
         
@@ -105,19 +106,19 @@
     <a href="{{ url_for('homepage') }}" class="back-button">Back to Homepage</a>
 
     <div class="container">
-        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="logo">
-        <p>-- QUANTUM TECH DEVELOPERS --</p>
+        <p>-- QUANTUM TECH DEVELOPERS --</p><br><br>
+        <img src="{{ url_for('static', filename='About-us.webp') }}" alt="Logo" class="logo">
     </div>
 
     <div class="about-container">
         <p>
-            At **QuantumTech Developments**, we are a forward-thinking tech company dedicated to creating innovative solutions that transform how you manage your time. Our goal is to help users stay organized and always one step ahead.
+            At QuantumTech Developments, we are a forward-thinking tech company dedicated to creating innovative solutions that transform how you manage your time. Our goal is to help users stay organized and always one step ahead.
             <br><br>
-            Our calendar application, **Planify**, is designed to streamline your daily schedule. Planify provides a visual representation of your tasks and upcoming events, helping you manage your day effortlessly. Additionally, Planify offers **directions to event locations**, ensuring you arrive on time, every time!
+            Our calendar application, Planify, is designed to streamline your daily schedule. Planify provides a visual representation of your tasks and upcoming events, helping you manage your day effortlessly. Additionally, Planify offers directions to event locations, ensuring you arrive on time, every time!
             <br><br>
-            Our hardworking team—**Muhammad Abdullah, Ramisa Zaman, Zarrar Khalid, and Ibrahim Nanitalwala**—is dedicated to pushing boundaries and developing solutions that make life easier. We believe staying organized should be **simple, efficient, and enjoyable**.
+            Our hardworking team— Muhammad Abdullah, Ramisa Zaman, Zarrar Khalid, and Ibrahim Nanitalwala —is dedicated to pushing boundaries and developing solutions that make life easier. We believe staying organized should be simple, efficient, and enjoyable.
             <br><br>
-            Join us today as we continue to innovate and enhance the way you plan, organize, and succeed. With Planify, your schedule is always in good hands. **Sign up now and take control of your time!**
+            Join us today as we continue to innovate and enhance the way you plan, organize, and succeed. With Planify, your schedule is always in good hands. Sign up now and take control of your time!
         </p>
     </div>
 
