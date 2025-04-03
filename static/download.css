@@ -65,3 +65,18 @@ body{
   background-color: rgb(122, 8, 175);  
   color: white;
 }
+
+.box .link-section{
+  text-align: center;
+  margin-top: 10px;
+}
+
+.link{
+  color:black;
+  text-decoration: none;
+}
+
+.link:hover{
+  color:#a107e8;
+  text-decoration: underline;
+}

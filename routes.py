@@ -226,7 +226,7 @@ def register_routes(app,db,maps):
             endingtime_string=request.form.get('end_time')
 
             if startingtime_string>endingtime_string:
-                flash ("Start time can't be greater then end time", catatory="error")
+                flash ("Start time can't be greater then end time", category="error")
                 return render_template('download.html')
 
             starting_time = datetime.strptime(startingtime_string, '%Y-%m-%dT%H:%M')
