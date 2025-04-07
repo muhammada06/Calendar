@@ -62,11 +62,11 @@ def register_routes(app,db,maps):
                 return render_template('addEvent.html')
             
             if len(event_name)>=100:
-                flash("Title must be less then 100 characters",catagory='error')
+                flash("Title must be less then 100 characters",category='error')
                 return render_template('addEvent.html')
             
             if len(location)>=200:
-                flash("Location must be less then 200 characters",catagory='error')
+                flash("Location must be less then 200 characters",category='error')
                 return render_template('addEvent.html')
 
             if starting_time >= ending_time:
