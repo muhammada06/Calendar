@@ -34,6 +34,8 @@ Installation Steps
   3. Using the command line:  `git clone https://github.com/muhammada06/Calendar`
   4. Using the command line prompt  `cd`, redirect to the folder the repository is in
   5. Run  `docker build -t calendar-app`
+  6. Run `docker run -p 5000:5000 calendar-app`
+  7. Once the programming is running, click on any of the links starting with "HTTP://" to run Planify!!!
 
 📖 Usage Guide
 
